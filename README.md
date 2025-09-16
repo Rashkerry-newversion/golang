@@ -74,6 +74,8 @@ Hello, Go!
 
 ![Hello World](images/image4.png)
 
+[LinkedIn: My First Go Lesson](https://www.linkedin.com/pulse/my-first-go-lesson-rashida-mohammed-ff5ie)
+
 ---
 
 ## GO Lesson 2: Variables and Data Types
@@ -195,6 +197,8 @@ Modify the example code to include:
 That’s it for Variables & Data Types!
 
 **Next lesson: Operators — turning those stored values into actions.**
+
+[Go Lesson 2: Variables & Data Types on LinkedIn](https://www.linkedin.com/pulse/go-lesson-2-variables-data-types-rashida-mohammed-num0e)
 
 ---
 
@@ -348,6 +352,10 @@ if age >= 18 && hasID {
 1. Write a program that checks if a number is between two other numbers (e.g. 10 < x < 20).
 2. Chain comparison & logic: combine `a > b && b < c`.
 3. Experiment with float vs int divisions to see how Go behaves.
+
+---
+
+[Go Lesson 3: Operators on LinkedIn](https://www.linkedin.com/pulse/go-lesson-3-operators-rashida-mohammed-zs1ne)
 
 ---
 
@@ -530,6 +538,10 @@ Write a program that:
 2. Prints "Even" if `n` is even.
 3. Prints "Odd" if `n` is odd.
 4. If `n` is 0, prints "Zero".
+
+---
+
+[Lesson 4: Control Flow in Go on LinkedIn](https://www.linkedin.com/pulse/lesson-4-control-flow-go-rashida-mohammed-mwpce)
 
 ---
 
@@ -726,6 +738,10 @@ func main() {
 1. Write a loop that prints all even numbers between 1 and 20
 2. Use `range` to loop over a map of country → capital
 3. Write an infinite loop that stops when a random number > 90 is generated
+
+---
+
+[Lesson 5: Loops in Go on LinkedIn](https://www.linkedin.com/pulse/lesson-5-loops-go-rashida-mohammed-9duqe)
 
 ---
 
