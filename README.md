@@ -901,6 +901,10 @@ Use an **anonymous function** to calculate the square of a number.
 
 ---
 
+[Lesson 6: Functions in Go on LinkedIn](https://www.linkedin.com/pulse/lesson-6-functions-go-rashida-mohammed-hv7xe)
+
+---
+
 This repo will be updated as I progress in my Go learning journey.  
 Stay tuned for more lessons!
 
