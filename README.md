@@ -745,6 +745,162 @@ func main() {
 
 ---
 
+## Golang Lesson 6: Functions
+
+Functions are one of the most important building blocks in Go. They allow you to group related code into reusable units, making your programs more organized, efficient, and easier to maintain.
+
+---
+
+### 🔹 What are Functions?
+
+A **function** is a block of code that performs a specific task. Instead of repeating the same logic multiple times, you can define it once in a function and call it whenever needed.
+
+Functions help you:
+
+- Avoid code duplication
+- Break down large problems into smaller pieces
+- Improve readability and maintainability
+
+---
+
+#### 📝 Example: A Simple Add Function
+
+```go
+package main
+
+import "fmt"
+
+// Function that adds two numbers
+func add(a int, b int) int {
+    return a + b
+}
+
+func main() {
+    result := add(5, 7)
+    fmt.Println("Sum:", result)
+}
+```
+
+##### ✅ Explanation
+
+1. `func add(a int, b int) int` → Defines a function named `add` that takes two integers and returns an integer.
+2. `return a + b` → Returns the sum of the inputs.
+3. In `main()`, we call `add(5, 7)` and print the result.
+
+**Output:**
+
+```go
+Sum: 12
+```
+
+---
+
+#### 🔹 Functions with Multiple Return Values
+
+Go supports returning **multiple values** from a function.
+
+```go
+package main
+
+import "fmt"
+
+// Function that returns two values
+func divide(a, b int) (int, string) {
+    if b == 0 {
+        return 0, "Division by zero is not allowed"
+    }
+    return a / b, "Success"
+}
+
+func main() {
+    result, message := divide(10, 2)
+    fmt.Println("Result:", result, "| Message:", message)
+}
+```
+
+**Output:**
+
+```go
+Result: 5 | Message: Success
+```
+
+##### 🔍 Breakdown
+
+1. (int, string) → this function returns two values:
+2. if b == 0 → checks if the divisor is zero.
+3. In main(), we assign both outputs to result and message.
+
+---
+
+#### 🔹 Anonymous Functions
+
+Go also supports **anonymous functions** (functions without a name).
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    multiply := func(x, y int) int {
+        return x * y
+    }
+
+    fmt.Println("Product:", multiply(3, 4))
+}
+```
+
+##### Anonymous Function Breakdown
+
+1. func(x, y int) int { ... } → defines a function without a name.
+2. It’s stored inside the variable multiply.
+3. You can call it with multiply(3, 4).
+
+**Output:**
+
+```go
+Product: 12
+```
+
+---
+
+### 🏋️ Practice Exercises
+
+#### 🔹 Exercise 1: Greeting Function
+
+Write a function called `greet` that takes a name (string) and prints:
+
+```go
+Hello, <name>!
+```
+
+#### 🔹 Exercise 2: Find Maximum
+
+Create a function `max` that takes two integers and returns the larger one.
+
+#### 🔹 Exercise 3: Average of Numbers
+
+Write a function that takes three `float64` numbers and returns their average.
+
+#### 🔹 Exercise 4: Even or Odd
+
+Create a function that checks if a number is `"Even"` or `"Odd"`.
+
+#### 🔹 Exercise 5: Anonymous Function Challenge
+
+Use an **anonymous function** to calculate the square of a number.
+
+---
+
+## 🔮 Key Takeaways
+
+- Functions are reusable blocks of code in Go.
+- They make programs **modular** and **maintainable**.
+- Functions can return **single or multiple values**.
+- You can use **anonymous functions** for quick logic.
+
+---
+
 This repo will be updated as I progress in my Go learning journey.  
 Stay tuned for more lessons!
 
