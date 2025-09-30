@@ -24,7 +24,7 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req ShortenRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.URL == "" {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
@@ -37,7 +37,25 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request) {
 	resp := ShortenResponse{
 		ShortURL: "http://localhost:8080/" + code,
 	}
+
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
+}
+
+func RedirectHandler(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Path[1:] // remove leading "/"
+	if code == "" {
+		http.Error(w, "Missing code", http.StatusBadRequest)
+		return
+	}
+
+	longURL, ok := urlStore[code]
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	http.Redirect(w, r, longURL, http.StatusFound)
 }
 
 func randomString(n int) string {

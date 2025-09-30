@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"go-url-shortener/cmd/internal/handlers"
+	"github.com/Rashkerry-newversion/golang/go-url-shortener/cmd/internal/handlers"
 )
 
 func main() {
