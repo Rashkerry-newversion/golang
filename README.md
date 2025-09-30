@@ -904,6 +904,234 @@ Use an **anonymous function** to calculate the square of a number.
 [Lesson 6: Functions in Go on LinkedIn](https://www.linkedin.com/pulse/lesson-6-functions-go-rashida-mohammed-hv7xe)
 
 ---
+Got it 👍 — let’s create a **step-by-step README.md for Day 58** so you can document the start of your Go URL Shortener project in the same style as your Everyday DevOps challenge.
+
+Here’s the draft:
+
+---
+
+## 🚀 Day 1 Practice : Go URL Shortener
+
+Today we start our **first Golang project** as part of the Everyday DevOps challenge!
+We’ll be building a **URL Shortener** — a simple yet powerful web service that takes a long URL and generates a short version for easier sharing.
+
+---
+
+### 📌 Goals for Practice Day 1
+
+- Initialize a new Go project.
+- Build a minimal HTTP server.
+- Create a **`/shorten`** endpoint to accept URLs and return a shortened link.
+- Use **in-memory storage** for now.
+
+---
+
+### 🛠️ Step 1: Setup Project
+
+```bash
+# create project folder
+mkdir go-url-shortener && cd go-url-shortener
+
+# initialize go module
+go mod init go-url-shortener
+```
+
+**Folder structure:**
+
+```bash
+go-url-shortener/
+├── cmd/
+│   └── server/        # main entry point
+├── internal/
+│   ├── handlers/      # request handlers
+│   ├── models/        # data models
+│   └── storage/       # storage layer (in-memory for now)
+└── go.mod
+```
+
+---
+
+### 🛠️ Step 2: Minimal Server
+
+- Before adding any logic, let’s make sure our Go server runs.
+
+- Create `cmd/server/main.go`:
+
+```go
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintln(w, "🚀 Go URL Shortener is live!")
+    })
+
+    fmt.Println("Server running on http://localhost:8080")
+    http.ListenAndServe(":8080", nil)
+}
+```
+
+- Run it:
+
+```go
+go run cmd/server/main.go
+```
+
+[!Server Running](images/image7.png)
+
+- Open your browser and go to `http://localhost:8080` to see the message.
+[!Server Running](images/image8.png)
+
+---
+
+### 🛠️ Step 3: Add Shorten Endpoint
+
+- Now we’ll build the /shorten endpoint.
+- This endpoint accepts a long URL in JSON format, generates a random code, and stores the mapping in memory.
+- Create `internal/handlers/shorten.go`:
+
+```go
+package handlers
+
+import (
+    "encoding/json"
+    "math/rand"
+    "net/http"
+    "time"
+)
+
+var urlStore = make(map[string]string) // in-memory store
+
+type ShortenRequest struct {
+    URL string `json:"url"`
+}
+
+type ShortenResponse struct {
+    ShortURL string `json:"short_url"`
+}
+
+func ShortenHandler(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodPost {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+
+    var req ShortenRequest
+    if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.URL == "" {
+        http.Error(w, "Invalid request", http.StatusBadRequest)
+        return
+    }
+
+    // generate random short code
+    rand.Seed(time.Now().UnixNano())
+    code := randomString(6)
+    urlStore[code] = req.URL
+
+    resp := ShortenResponse{
+       ShortURL: "http://localhost:8080/" + code,
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(resp)
+}
+
+func RedirectHandler(w http.ResponseWriter, r *http.Request) {
+    code := r.URL.Path[1:] // remove leading "/"
+    if code == "" {
+        http.Error(w, "Missing code", http.StatusBadRequest)
+        return
+    }
+
+    longURL, ok := urlStore[code]
+    if !ok {
+        http.NotFound(w, r)
+        return
+    }
+
+    http.Redirect(w, r, longURL, http.StatusFound)
+}
+
+func randomString(n int) string {
+    letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+    b := make([]rune, n)
+    for i := range b {
+        b[i] = letters[rand.Intn(len(letters))]
+    }
+    return string(b)
+}
+
+```
+
+Update `cmd/server/main.go`:
+
+```go
+package main
+
+import (
+    "fmt"
+    "net/http"
+
+    "github.com/username/go-url-shortener/cmd/internal/handlers"
+)
+
+func main() {
+    http.HandleFunc("/shorten", handlers.ShortenHandler)
+    fmt.Println("Server running on http://localhost:8080"
+    http.ListenAndServe(":8080", nil)
+}
+```
+
+- Make sure to push `go-url-shortener` to GitHub. That would allow go to pull it from your github. Also make sure the path matches that of `go.mod`
+
+```bash
+git add go-url-shortener
+git commit -m "commit message"
+git push origin main
+```
+
+- Then run:
+
+```bash
+go mod tidy   #this allows go to access the resources from your repo
+go run main.go
+```
+
+---
+
+### 🧪 Step 4: Test the API
+
+- Open a new terminal window and run below to send a request:
+
+```bash
+Invoke-WebRequest -Uri "http://localhost:8080/shorten" `
+  -Method POST `
+  -Body '{"url":"https://example.com"}' `
+  -ContentType "application/json"
+
+```
+
+[!API TESTING](images/image9.png)
+
+Response:
+
+```json
+{"short_url":"http://localhost:8080/R9xVcO"}
+```
+
+[!API Redirecting](images/image10.png)
+
+---
+
+### ✅ Next Step (Day 59)
+
+- Implement the **redirect feature** → hitting the short link should redirect to the original URL.
+- Add some basic logging.
+
+---
 
 This repo will be updated as I progress in my Go learning journey.  
 Stay tuned for more lessons!

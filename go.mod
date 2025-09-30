@@ -1,3 +1,3 @@
-module github.com/Rashkerry-newversion/golang/go-url-shortener
+module github.com/Rashkerry-newversion/golang
 
 go 1.25.0
