@@ -905,6 +905,425 @@ Use an **anonymous function** to calculate the square of a number.
 
 ---
 
+## 📘 Lesson 7: Arrays & Slices in Go
+
+- Arrays and slices are **fundamental data structures** in Go. They are often the first step in learning how to store and manipulate collections of data.
+
+- Think of arrays as **egg cartons** (fixed slots). Once you buy a 12-slot carton, it stays 12 slots.
+- Slices, on the other hand, are like **expandable baskets**, you can keep adding fruits without worrying about size limits.
+
+---
+
+### 🔹 Step 1: Understanding Arrays
+
+1. Arrays in Go have a **fixed length**.
+2. If you create an array of 3 elements, it will *always* hold exactly 3 items.
+3. Each element is accessed by its **index** (starting from 0).
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    // Declare an array of size 3
+    var numbers [3]int  
+
+    // Assign values to each index
+    numbers[0] = 10
+    numbers[1] = 20
+    numbers[2] = 30
+
+    fmt.Println(numbers) // Output: [10 20 30]
+}
+```
+
+📌 **Explanation:**
+
+- `[3]int` means the array can only store 3 integers.
+- If you try to add a 4th element → ❌ compiler error.
+
+⚠️ **Common Pitfall:**
+Arrays are **not flexible**. You cannot grow them once defined. This is why Go developers prefer **slices**.
+
+---
+
+### 🔹 Step 2: Working with Slices
+
+- Slices are more common in Go because they are **dynamic**.
+- Unlike arrays, they can grow and shrink as needed.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    // Slice of strings
+    fruits := []string{"apple", "banana", "cherry"}
+
+    // Add another element using append
+    fruits = append(fruits, "date")
+
+    fmt.Println(fruits) // Output: [apple banana cherry date]
+}
+```
+
+📌 **Explanation:**
+
+1. `[]string` means a slice of strings with no fixed length.
+2. `append` adds a new item to the slice, expanding it automatically.
+
+⚠️ **Common Pitfall:**
+`append` returns a **new slice**. If you forget to reassign, changes won’t persist.
+
+---
+
+### 🔹 Step 3: Slicing an Array
+
+- You can create a slice **from an array** (or another slice).
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    arr := [5]int{1, 2, 3, 4, 5}
+
+    // Create a slice from index 1 to 3 (excluding 4)
+    slice := arr[1:4]  
+
+    fmt.Println(slice) // Output: [2 3 4]
+}
+```
+
+📌 **Explanation:**
+
+1. `arr[1:4]` means: start at index 1 → stop before index 4.
+2. Slices are like a **window into the array**.
+
+⚠️ **Common Pitfall:**
+
+- If you change the slice, it **affects the original array** (since they share the same memory).
+
+---
+
+### 🔹 Step 4: Length vs Capacity in Slices
+
+- Every slice has:
+
+1. **Length** → number of elements currently in the slice.
+2. **Capacity** → maximum number of elements before needing reallocation.
+
+```go
+numbers := []int{1, 2, 3}
+fmt.Println(len(numbers)) // 3
+fmt.Println(cap(numbers)) // 3
+
+numbers = append(numbers, 4)
+fmt.Println(len(numbers)) // 4
+fmt.Println(cap(numbers)) // May increase to 6 or more
+```
+
+---
+
+## ✅ Key Takeaways
+
+1. Use **arrays** only when you need fixed-size storage.
+2. Use **slices** for almost everything else (flexible, powerful).
+3. Remember `append` returns a new slice.
+4. Understand **length vs capacity** for performance tuning.
+
+---
+
+📖 [Read the full LinkedIn article](https://www.linkedin.com/pulse/lesson-7-arrays-slices-go-rashida-mohammed-qxppe)
+
+---
+
+## 📘 Lesson 8: Structs & Maps in Go
+
+- In Go, **structs** and **maps** are essential for organizing data.
+- Think of **structs** as blueprints for objects, and **maps** as dictionaries (key-value pairs).
+
+---
+
+### 🔹 Step 1: Structs – Your Own Data Type
+
+- Structs let you define **custom types** by grouping related fields.
+
+```go
+package main
+
+import "fmt"
+
+// Define a struct
+type Person struct {
+    Name string
+    Age  int
+}
+
+func main() {
+    // Create an instance of Person
+    p := Person{Name: "Alice", Age: 25}
+    fmt.Println(p)          // {Alice 25}
+    fmt.Println(p.Name)     // Alice
+    fmt.Println(p.Age)      // 25
+}
+```
+
+📌 **Explanation:**
+
+1. A `struct` is like a box with labeled compartments.
+2. Each field has a name and type (`Name string`, `Age int`).
+3. You can access them with dot notation (`p.Name`).
+
+⚠️ **Pitfall:** If you forget to initialize, fields default to zero values (empty string, 0, false).
+
+---
+
+### 🔹 Step 2: Embedding Structs
+
+- Structs can be nested for more complex models.
+
+```go
+type Address struct {
+    City, Country string
+}
+
+type Employee struct {
+    Name    string
+    Address Address
+}
+
+func main() {
+    e := Employee{
+        Name: "Bob",
+        Address: Address{
+            City: "Accra", Country: "Ghana",
+        },
+    }
+    fmt.Println(e.Address.City) // Accra
+}
+```
+
+📌 **Explanation:**
+Structs let you build **hierarchies**, just like real-world relationships.
+
+---
+
+### 🔹 Step 3: Maps – Key-Value Store
+
+- Maps are Go’s version of dictionaries or hash tables.
+
+```go
+func main() {
+    // Declare a map
+    scores := map[string]int{
+        "Alice": 95,
+        "Bob":   88,
+    }
+
+    fmt.Println(scores["Alice"]) // 95
+
+    // Add a new key
+    scores["Charlie"] = 72
+
+    // Check existence
+    val, exists := scores["David"]
+    fmt.Println(val, exists) // 0 false
+}
+```
+
+📌 **Explanation:**
+
+1. Keys must be unique.
+2. Accessing a missing key returns zero value + `false`.
+
+⚠️ **Pitfall:** Maps are not safe for concurrent writes — you’ll need `sync.Mutex` or `sync.Map`.
+
+---
+
+### ✅ Key Notes
+
+- Structs = group related fields into one logical unit.
+- Maps = fast key-value lookups.
+- Use structs when your data has **defined fields**.
+- Use maps when your data is **dynamic and lookup-based**.
+
+📖 [Full LinkedIn Article](https://www.linkedin.com/pulse/lesson-8-structs-maps-go-rashida-mohammed-bwnce)
+
+---
+
+## 📘 Lesson 9: Pointers, Methods & Interfaces in Go
+
+This lesson introduces **Go’s deeper concepts**:
+
+- **Pointers**: working with memory addresses.
+- **Methods**: attaching functions to structs.
+- **Interfaces**: defining behavior, not data.
+
+---
+
+### 🔹 Step 1: Pointers
+
+- A pointer stores the **memory address** of a value.
+
+```go
+func main() {
+    x := 10
+    p := &x // pointer to x
+    fmt.Println(*p) // 10
+
+    *p = 20 // update value via pointer
+    fmt.Println(x) // 20
+}
+```
+
+📌 **Explanation:**
+
+- `&x` → address of `x`.
+- `*p` → dereference, get value at pointer.
+
+⚠️ **Pitfall:** Forgetting `*` means you manipulate the pointer, not the value.
+
+---
+
+### 🔹 Step 2: Methods
+
+- Methods are functions that belong to a `struct type`.
+
+```go
+type Rectangle struct {
+    Width, Height float64
+}
+
+// Method with receiver
+func (r Rectangle) Area() float64 {
+    return r.Width * r.Height
+}
+
+func main() {
+    rect := Rectangle{Width: 4, Height: 3}
+    fmt.Println(rect.Area()) // 12
+}
+```
+
+📌 **Explanation:**
+
+- `(r Rectangle)` is a **receiver** → ties the method to `Rectangle`.
+- It makes code feel **object-oriented**, but without classes.
+
+---
+
+### 🔹 Step 3: Interfaces
+
+- Interfaces define **behavior**.
+- If a type implements all required methods, it satisfies the interface automatically.
+
+```go
+type Shape interface {
+    Area() float64
+}
+
+func printArea(s Shape) {
+    fmt.Println("Area:", s.Area())
+}
+```
+
+📌 **Explanation:**
+
+- No explicit `implements`.
+- If `Rectangle` has `Area()`, it **automatically** satisfies `Shape`.
+
+⚠️ **Pitfall:** Forgetting method signatures (parameter or return mismatch) means your type won’t satisfy the interface.
+
+---
+
+### ✅ Key Note
+
+- **Pointers** allow direct memory manipulation.
+- **Methods** let you attach behavior to data.
+- **Interfaces** are Go’s way of abstracting behavior (no inheritance).
+
+📖 [Full LinkedIn Article](https://www.linkedin.com/pulse/lesson-9-pointers-methods-interfaces-go-rashida-mohammed-c8vke)
+
+---
+
+## 📘 Lesson 10: Packages & Modules in Go
+
+Go encourages clean, modular code organization using **packages** and **modules**.
+
+---
+
+### 🔹 Step 1: What is a Package?
+
+- A **package** is just a folder containing Go files.
+
+```go
+// mathutils/add.go
+package mathutils
+
+func Add(a, b int) int {
+    return a + b
+}
+```
+
+- Then use it in your main program:
+
+```go
+package main
+
+import (
+    "fmt"
+    "myapp/mathutils"
+)
+
+func main() {
+    fmt.Println(mathutils.Add(2, 3)) // 5
+}
+```
+
+📌 **Explanation:**
+
+- Every Go file starts with `package <name>`.
+- Use `import` to bring it into another file.
+
+---
+
+### 🔹 Step 2: Modules
+
+- Modules are collections of packages + versioning.
+
+```bash
+go mod init myapp
+go mod tidy
+```
+
+📌 **Explanation:**
+
+- `go.mod` defines your module name and dependencies.
+- Think of it as a **manifest file** (like `package.json` in Node).
+
+---
+
+### 🔹 Step 3: Exported vs Unexported
+
+- Functions starting with **uppercase** (`Add`) are **exported** (public).
+- Functions starting with **lowercase** (`subtract`) are **private** to the package.
+
+---
+
+### ✅ Takeaways
+
+- Packages = organize code into reusable chunks.
+- Modules = versioned collection of packages.
+- Uppercase names = public, lowercase = private.
+
+📖 [Full LinkedIn Article](https://www.linkedin.com/pulse/lesson-10-packages-modules-go-organizing-code-right-way-mohammed-xuqpe)
+
+---
+
 ## 🚀 Day 1 Practice : Go URL Shortener
 
 Today we start our **first Golang project** as part of the Everyday DevOps challenge!
@@ -1293,7 +1712,7 @@ Enter first number (or 'q' to quit):
 
 ---
 
-### Step-by-step code breakdown 
+### Step-by-step code breakdown
 
 `main.go`
 
