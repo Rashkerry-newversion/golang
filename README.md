@@ -904,11 +904,6 @@ Use an **anonymous function** to calculate the square of a number.
 [Lesson 6: Functions in Go on LinkedIn](https://www.linkedin.com/pulse/lesson-6-functions-go-rashida-mohammed-hv7xe)
 
 ---
-Got it 👍 — let’s create a **step-by-step README.md for Day 58** so you can document the start of your Go URL Shortener project in the same style as your Everyday DevOps challenge.
-
-Here’s the draft:
-
----
 
 ## 🚀 Day 1 Practice : Go URL Shortener
 
@@ -1111,7 +1106,7 @@ Invoke-WebRequest -Uri "http://localhost:8080/shorten" `
   -Method POST `
   -Body '{"url":"https://example.com"}' `
   -ContentType "application/json"
-  
+
 ```
 
 ![API TESTING](images/image9.png)
