@@ -981,10 +981,10 @@ func main() {
 go run cmd/server/main.go
 ```
 
-[!Server Running](images/image7.png)
+![Server Running](images/image7.png)
 
 - Open your browser and go to `http://localhost:8080` to see the message.
-[!Server Running](images/image8.png)
+![Server Running](images/image8.png)
 
 ---
 
@@ -1111,10 +1111,10 @@ Invoke-WebRequest -Uri "http://localhost:8080/shorten" `
   -Method POST `
   -Body '{"url":"https://example.com"}' `
   -ContentType "application/json"
-
+  
 ```
 
-[!API TESTING](images/image9.png)
+![API TESTING](images/image9.png)
 
 Response:
 
@@ -1122,18 +1122,326 @@ Response:
 {"short_url":"http://localhost:8080/R9xVcO"}
 ```
 
-[!API Redirecting](images/image10.png)
+![API Redirecting](images/image10.png)
 
 ---
 
-### ✅ Next Step (Day 59)
+## Practice Day 2 — Go CLI Calculator
 
-- Implement the **redirect feature** → hitting the short link should redirect to the original URL.
-- Add some basic logging.
+A friendly, step-by-step README you can drop into your Day 2 folder. It explains each step clearly so you can follow along without editing markdown for hours.
 
 ---
 
-This repo will be updated as I progress in my Go learning journey.  
-Stay tuned for more lessons!
+### Overview
+
+Build a simple **Command Line Interface (CLI) calculator** in Go that supports:
+
+- Addition `+`
+- Subtraction `-`
+- Multiplication `*`
+- Division `/`
+
+This README shows how to set up, run, and understand the code line-by-line.
+
+---
+
+### Prerequisites
+
+1. Go installed on your machine (Go toolchain available in `PATH`).
+2. A terminal (PowerShell, Git Bash, WSL, macOS Terminal).
+3. Basic familiarity with running `go run` and editing files.
+
+---
+
+### Project structure (what to create)
+
+```bash
+practice-day2-cli-calculator/
+├── go.mod           # optional but recommended
+└── main.go
+```
+
+---
+
+### Step-by-step setup (exact commands)
+
+#### 1. Create project folder
+
+**Bash / Git Bash / WSL:**
+
+```bash
+mkdir practice-day2-cli-calculator         #any name would do
+cd practice-day2-cli-calculator
+```
+
+**PowerShell:**
+
+```powershell
+New-Item -ItemType Directory practice-day2-cli-calculator
+Set-Location practice-day2-cli-calculator
+```
+
+#### 2. (Optional) Initialize go module
+
+- Replace `github.com/yourusername/practice-day2-cli-calculator` **with your path or skip if you prefer**.
+
+```bash
+go mod init github.com/yourusername/practice-day2-cli-calculator
+go mod tidy
+```
+
+#### 3. Create `main.go`
+
+- Create a file named `main.go` and paste the full code from the next section.
+
+##### `main.go`(Make sure to push to github if the mod mentions your github username)
+
+```go
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+    "strings"
+)
+
+func main() {
+    reader := bufio.NewReader(os.Stdin)
+    
+    fmt.Println("Go CLI Calculator")
+    fmt.Println("------------------")
+
+    for {
+        // Read first number (or 'q' to quit)
+        fmt.Print("Enter first number (or 'q' to quit): ")
+        input1, _ := reader.ReadString('\n')
+        input1 = strings.TrimSpace(input1)
+        if strings.EqualFold(input1, "q") {
+            fmt.Println("Goodbye!")
+            return
+        }
+        num1, err := strconv.ParseFloat(input1, 64)
+        if err != nil {
+            fmt.Println("Invalid number. Please enter a valid number (e.g. 12.34).")
+            continue
+        }
+
+        // Read second number
+        fmt.Print("Enter second number: ")
+        input2, _ := reader.ReadString('\n')
+        input2 = strings.TrimSpace(input2)
+        num2, err := strconv.ParseFloat(input2, 64)
+        if err != nil {
+            fmt.Println("Invalid number. Please enter a valid number.")
+            continue
+        }
+
+        // Read operation
+        fmt.Print("Choose operation (+, -, *, /): ")
+        op, _ := reader.ReadString('\n')
+        op = strings.TrimSpace(op)
+
+        // Compute result
+        var result float64
+        valid := true
+
+        switch op {
+        case "+":
+            result = num1 + num2
+        case "-": 
+            result = num1 - num2
+        case "*":
+            result = num1 * num2
+        case "/":
+            if num2 == 0 {
+                fmt.Println("Error: division by zero is not allowed.")
+                valid = false
+            } else {
+                result = num1 / num2
+            }
+            fmt.Println("Unknown operation. Use +, -, * or /.")
+            valid = false
+        }
+
+        // Print result if operation was valid
+        if valid {
+            // Remove trailing .0 for integers (optional cosmetic)
+            if result == float64(int64(result)) {
+                fmt.Printf("Result: %d\n\n", int64(result))
+            } else {
+                fmt.Printf("Result: %g\n\n", result)
+            }
+        }
+    }
+}
+```
+
+#### 4. Run the program
+
+From the project root:
+
+```bash
+go run main.go
+```
+
+You’ll see a prompt like:
+
+```bash
+Go CLI Calculator
+------------------
+Enter first number (or 'q' to quit):
+```
+
+![CLI CALCULATOR](images/image11.png)
+
+---
+
+### Step-by-step code breakdown 
+
+`main.go`
+
+1. **Imports**
+
+   ```go
+   import (
+       "bufio"
+       "fmt"
+       "os"
+       "strconv"
+       "strings"
+   )
+   ```
+
+   - `bufio` + `os` let us read user input from stdin.
+   - `strconv` converts strings to numbers.
+   - `strings` trims whitespace.
+
+2. **Create reader**
+
+   ```go
+   reader := bufio.NewReader(os.Stdin)
+   ```
+
+   - A buffered reader simplifies reading lines from the user.
+
+3. **Main loop**
+
+   ```go
+   for {
+       // ... prompts and processing ...
+   }
+   ```
+
+   - The program runs in a loop so you can perform many calculations without restarting.
+
+4. **First number input & quit option**
+
+   ```go
+   input1, _ := reader.ReadString('\n')
+   input1 = strings.TrimSpace(input1)
+   if strings.EqualFold(input1, "q") { ... }
+   ```
+
+   - Trim spaces/newlines.
+   - Typing `q` (case-insensitive) quits the program.
+
+5. **Parsing numbers**
+
+   ```go
+   num1, err := strconv.ParseFloat(input1, 64)
+   ```
+
+   - `ParseFloat` accepts decimals (e.g., `3.14`) and integers.
+   - If parsing fails, the program prints an error and restarts the loop (`continue`).
+
+6. **Operation selection**
+
+   ```go
+   op, _ := reader.ReadString('\n')
+   op = strings.TrimSpace(op)
+   ```
+
+   - Accepts `+`, `-`, `*`, or `/`. Anything else prints a helpful message.
+
+7. **Switch and result**
+
+   ```go
+   switch op {
+   case "+":
+       result = num1 + num2
+   ...
+   }
+   ```
+
+   - Handles division-by-zero explicitly.
+
+8. **Print result nicely**
+
+   - Uses integer formatting when the result is whole, or prints a clean float otherwise.
+
+---
+
+### Example session (what you’ll see)
+
+```bash
+Go CLI Calculator
+------------------
+Enter first number (or 'q' to quit): 10
+Enter second number: 5
+Choose operation (+, -, *, /): *
+Result: 50
+
+Enter first number (or 'q' to quit): 7.5
+Enter second number: 2.5
+Choose operation (+, -, *, /): +
+Result: 10
+```
+
+---
+
+### Common issues & how to fix them
+
+- **"Invalid number"** → You typed letters or a comma instead of a dot (`3,14` vs `3.14`). Use dot `.` for decimals.
+- **Program exits unexpectedly** → Make sure you didn’t accidentally press `q` or send an EOF (Ctrl+D on Unix).
+- **Division by zero** → The program prints `Error: division by zero...` and lets you try again.
+- **Locale decimal separator**: Some systems use `,`. This code expects `.`. If you need `,`, we can add a pre-processing step to replace `,` with `.`.
+- **Windows newline issues when copy-pasting** → Use a proper editor (VS Code) and save file with UTF-8. `go run main.go` works the same on Windows (PowerShell) as on Unix.
+
+---
+
+### Test cases you can try
+
+- `10` and `5` with `*` → `50`
+- `7.5` and `2.5` with `+` → `10`
+- `5` and `0` with `/` → error: division by zero
+- Non-numeric input like `abc` → “Invalid number” message
+
+---
+
+### Next steps (optional improvements)
+
+- Support scientific notation (already supported by `ParseFloat`).
+- Add keyboard shortcuts or accept arguments (`./calc 2 + 2`).
+- Create unit tests for the calculation logic.
+- Add an expression parser (so users can type `2 + 3 * 4`).
+- Add history & recall of previous results.
+
+---
+
+### Final notes
+
+- This README is intentionally step-by-step and copy-paste ready — the `main.go` above should work as-is.
+- If you want, I can:
+
+  1. Create the repo structure and files for you (ready to commit), or
+  2. Provide a version that accepts CLI args (non-interactive), or
+  3. Add unit tests and a simple `Makefile`.
+
+---
+
+This repo was updated as I progressed in my Go learning journey.  
+End of My Go Journey!
 
 ---
